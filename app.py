@@ -6,17 +6,24 @@ import plotly.graph_objects as go
 import pandas as pd
 import numpy as np
 import scipy.stats as stats
-
+import requests
 
 start_date=st.date_input("Start Sample", value=pd.to_datetime("2020-01-01"))
 end_date=st.date_input("End Sample", value=pd.to_datetime("today"))
 ticker=st.text_input("Ticker Symbol", value="AAPL")
 @st.cache_data
+@st.cache_data
 def load_data(symbol, start, end):
-    df = yf.download(symbol, start=start, end=end )
+    session = requests.Session()
+    session.headers.update({
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    })
+    try:
+        df = yf.download(symbol, start=start, end=end, session=session)
+    except Exception as e:
+        return None
     if df.empty:
         return None
-
     daily_returns = df['Close'].pct_change().dropna().squeeze()
     return daily_returns
 
