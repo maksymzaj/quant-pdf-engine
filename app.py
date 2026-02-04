@@ -12,7 +12,6 @@ start_date=st.date_input("Start Sample", value=pd.to_datetime("2020-01-01"))
 end_date=st.date_input("End Sample", value=pd.to_datetime("today"))
 ticker=st.text_input("Ticker Symbol", value="AAPL")
 @st.cache_data
-@st.cache_data
 def load_data(symbol, start, end):
     session = requests.Session()
     session.headers.update({
